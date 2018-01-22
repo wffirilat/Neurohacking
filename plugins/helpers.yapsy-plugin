@@ -1,7 +1,7 @@
 
 [Core]
-Name = dataz
-Module = dataz
+Name = helpers
+Module = helpers
 
 [Documentation]
 Author = Various
