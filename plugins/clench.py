@@ -16,8 +16,10 @@ from open_bci_v3 import OpenBCISample
 
 class PluginClench(plugintypes.IPluginExtended):
     def __init__(self):
+        self.release = True
         self.packetnum = -1
         self.threshold = None
+        self.uthreshold = None
         self.ticknum = None
         self.storelength = 1024
         self.starttime = None
@@ -25,6 +27,7 @@ class PluginClench(plugintypes.IPluginExtended):
         self.channel = 3
         self.restingmax, self.restingmin = 0, 0
         self.clenchmax, self.clenchmin = 0, 0
+        self.unclenchmax, self.unclenchmin = 0, 0
         self.rawdata = np.zeros((8, self.storelength))
         self.data = np.zeros((8, self.storelength))
 
@@ -85,8 +88,16 @@ class PluginClench(plugintypes.IPluginExtended):
         elif self.state == 'postclench':
             if dt > 9:
                 self.threshold = self.restingmax + ((self.clenchmax - self.restingmax) / 2)
+                if self.release:
+                    self.uthreshold = self.restingmin + ((self.clenchmin - self.restingmin) / 2)
                 self.state = 'calibrated'
                 print(self.restingmax, self.restingmin, self.clenchmax, self.clenchmin)
+                return
+            if self.release:
+                if self.current > self.unclenchmax:
+                    self.unclenchmax = self.current
+                if self.current < self.unclenchmin:
+                    self.unclenchmin = self.current
     
     @property
     def current(self):
@@ -95,4 +106,7 @@ class PluginClench(plugintypes.IPluginExtended):
     def tick(self):
         if self.current > self.threshold:
             print(f" {self.ticknum}: Clenched!!")
+        if self.release:
+            if self.current < self.uthreshold:
+                print(f" {self.ticknum}: Clenched!!")
 
