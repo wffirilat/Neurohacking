@@ -91,7 +91,10 @@ class PluginClench(plugintypes.IPluginExtended):
                 if self.release:
                     self.uthreshold = self.restingmin + ((self.clenchmin - self.restingmin) / 2)
                 self.state = 'calibrated'
-                print(self.restingmax, self.restingmin, self.clenchmax, self.clenchmin)
+                print ("Resting Max", self.restingmax, "Resting Min", self.restingmin, "\n")
+                print ("Clench Max,", self.clenchmax, "Clench Min",self.clenchmin, "\n")
+                if self.release:
+                    print ("Unclench Max,", self.unclenchmax, "Unclench Min",self.unclenchmin, "\n")
                 return
             if self.release:
                 if self.current > self.unclenchmax:
@@ -106,6 +109,7 @@ class PluginClench(plugintypes.IPluginExtended):
     def tick(self):
         if self.current > self.threshold:
             print(f" {self.ticknum}: Clenched!!")
+
         if self.release:
             if self.current < self.uthreshold:
                 print(f" {self.ticknum}: Clenched!!")
