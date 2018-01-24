@@ -108,9 +108,10 @@ class PluginClench(plugintypes.IPluginExtended):
 
     def tick(self):
         if self.current > self.threshold:
-            print(f" {self.ticknum}: Clenched!!")
+            #print(f" {self.ticknum}: Clenched!!")
+            ...
 
         if self.release:
             if self.current < self.uthreshold:
-                print(f" {self.ticknum}: Clenched!!")
+                print(f" {self.ticknum}: Unclenched!!")
 

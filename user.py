@@ -112,23 +112,15 @@ if __name__ == '__main__':
         print("user.py: Logging Disabled.")
 
     print("\n-------INSTANTIATING BOARD-------")
-
+    print("About to open board")
     board = bci.OpenBCIBoard(port=args.port,
                              daisy=args.daisy,
                              filter_data=args.filtering,
                              scaled_output=True,
                              log=args.log,
                              aux=args.aux)
-    board.disconnect() #If this doesn't work then we will have to move this much lower. Test last print call before restart
-    print("Unhanging socket")
-    board = bci.OpenBCIBoard(port=args.port,
-                             daisy=args.daisy,
-                             filter_data=args.filtering,
-                             scaled_output=True,
-                             log=args.log,
-                             aux=args.aux)
-    #Test socket code here
     #  Info about effective number of channels and sampling rate
+    print ("Got this far") #This does not happen t2
     if board.daisy:
         print("Force daisy mode:")
     else:
