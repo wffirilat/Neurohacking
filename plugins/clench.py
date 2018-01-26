@@ -7,7 +7,6 @@ Author: wffirilat
 
 import numpy as np
 import time
-
 import sys
 
 import plugin_interface as plugintypes
@@ -34,6 +33,7 @@ class PluginClench(plugintypes.IPluginExtended):
     def activate(self):
         print("clench activated")
 
+
     # called with each new sample
     def __call__(self, sample: OpenBCISample):
         if sample.id == 0:
@@ -46,11 +46,14 @@ class PluginClench(plugintypes.IPluginExtended):
             [sum(self.rawdata[i, :]) / self.storelength for i in range(8)],
             sample.channel_data
         )]
-
+        print(np.median(self.rawdata[3,:])) #The reason this is here is because it might help our basis be better
+        '''
         if self.state != 'calibrated':
             self.calibratetick()
         else:
             self.tick()
+        '''
+
 
     def calibratetick(self):
         # print(self.data)
@@ -107,6 +110,7 @@ class PluginClench(plugintypes.IPluginExtended):
         return self.data[self.channel, self.ticknum % self.storelength]
 
     def tick(self):
+
         if self.current > self.unclenchmax-((self.current-self.unclenchmax)/5):#watch this work!
             print(f" {self.current}: Clenched!!")
             ...
