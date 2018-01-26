@@ -77,7 +77,7 @@ class PluginClench(plugintypes.IPluginExtended):
                 self.state = 'clenching'
                 return
         elif self.state == 'clenching':
-            if dt > 8:
+            if dt > 9:
                 print('Unclench!!')
                 self.state = 'postclench'
                 return
@@ -86,7 +86,7 @@ class PluginClench(plugintypes.IPluginExtended):
             if self.current < self.clenchmin:
                 self.clenchmin = self.current
         elif self.state == 'postclench':
-            if dt > 9:
+            if dt > 10:
                 self.threshold = self.restingmax + ((self.clenchmax - self.restingmax) / 2)
                 if self.release:
                     self.uthreshold = self.restingmin + ((self.clenchmin - self.restingmin) / 2)
@@ -107,11 +107,11 @@ class PluginClench(plugintypes.IPluginExtended):
         return self.data[self.channel, self.ticknum % self.storelength]
 
     def tick(self):
-        if self.current > self.threshold:
-            #print(f" {self.ticknum}: Clenched!!")
+        if self.current > self.unclenchmax-((self.current-self.unclenchmax)/5):#watch this work!
+            print(f" {self.current}: Clenched!!")
             ...
 
-        if self.release:
-            if self.current < self.uthreshold:
-                print(f" {self.ticknum}: Unclenched!!")
+        #if self.release:
+        #   if self.current < self.uthreshold:
+        #      print(f" {self.ticknum}: Unclenched!!")
 
