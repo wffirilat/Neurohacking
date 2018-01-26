@@ -69,7 +69,8 @@ class OpenBCIBoard(object):
 
     # noinspection PyUnusedLocal
     def __init__(self, port=None, baud=115200, filter_data=True,
-                 scaled_output=True, daisy=False, aux=False, impedance=False, log=True, timeout=None):
+                 scaled_output=True, daisy=False, aux=False, impedance=False, log=True, timeout=1):
+        #This should now time out after 5 seconds
         self.log = log  # print_incoming_text needs log
         self.streaming = False
         self.baudrate = baud

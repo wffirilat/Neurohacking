@@ -30,9 +30,13 @@ class PluginHelpers(plugintypes.IPluginExtended):
             [sum(self.rawdata[i, :]) / self.storelength for i in range(8)],
             sample.channel_data
         )]
+        self.print(sample)
 
     def minmax(self, sample):
         print(min(self.data[3, :]), max(self.data[3, :]))
+
+    def print(self, sample):
+        print(self.data[3,-1])
 
     def thresholdDetect(self, sample):
         if self.data[3, (sample.id + 256 * self.packetnum) % self.storelength] > 1000:
