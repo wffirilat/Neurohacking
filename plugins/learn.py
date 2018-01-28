@@ -22,8 +22,11 @@ from sklearn.svm import SVC
 import plugin_interface as plugintypes
 from open_bci_v3 import OpenBCISample
 
+
+#This code follows this tutorial: https://machinelearningmastery.com/machine-learning-in-python-step-by-step/
 class PluginLearn(plugintypes.IPluginExtended):
     def __init__(self):
+        #Does not give a warning when run here
         url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
         names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
         dataset = pandas.read_csv(url, names=names)
@@ -77,6 +80,7 @@ class PluginLearn(plugintypes.IPluginExtended):
 
     # called with each new sample
     def __call__(self, sample: OpenBCISample):
+        #Does not like being threaded
         '''if sample.id == 0:
             self.packetnum += 1
         self.rawdata[:, (sample.id + 256 * self.packetnum) % self.storelength] = sample.channel_data
