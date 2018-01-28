@@ -30,14 +30,14 @@
       <file leaf-file-name="learn.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/plugins/learn.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2000">
-              <caret line="79" column="8" lean-forward="false" selection-start-line="79" selection-start-column="8" selection-end-line="79" selection-end-column="8" />
+            <state relative-caret-position="-1040">
+              <caret line="86" column="8" lean-forward="true" selection-start-line="86" selection-start-column="8" selection-end-line="126" selection-end-column="51" />
               <folding>
                 <element signature="e#86#104#0" expanded="true" />
                 <element signature="e#3012#3038#0" expanded="false" />
-                <element signature="e#3573#3622#0" expanded="false" />
-                <element signature="e#3661#3683#0" expanded="false" />
-                <element signature="e#3732#3864#0" expanded="false" />
+                <element signature="e#5565#5614#0" expanded="false" />
+                <element signature="e#5653#5675#0" expanded="false" />
+                <element signature="e#5724#5856#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -599,14 +599,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/plugins/learn.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2000">
-          <caret line="79" column="8" lean-forward="false" selection-start-line="79" selection-start-column="8" selection-end-line="79" selection-end-column="8" />
+        <state relative-caret-position="-1040">
+          <caret line="86" column="8" lean-forward="true" selection-start-line="86" selection-start-column="8" selection-end-line="126" selection-end-column="51" />
           <folding>
             <element signature="e#86#104#0" expanded="true" />
             <element signature="e#3012#3038#0" expanded="false" />
-            <element signature="e#3573#3622#0" expanded="false" />
-            <element signature="e#3661#3683#0" expanded="false" />
-            <element signature="e#3732#3864#0" expanded="false" />
+            <element signature="e#5565#5614#0" expanded="false" />
+            <element signature="e#5653#5675#0" expanded="false" />
+            <element signature="e#5724#5856#0" expanded="false" />
           </folding>
         </state>
       </provider>
