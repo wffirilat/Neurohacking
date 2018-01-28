@@ -46,13 +46,13 @@ class PluginClench(plugintypes.IPluginExtended):
             [sum(self.rawdata[i, :]) / self.storelength for i in range(8)],
             sample.channel_data
         )]
-        print(np.median(self.rawdata[3,:])) #The reason this is here is because it might help our basis be better
-        '''
+        #print(np.median(self.rawdata[3,:])) #The reason this is here is because it might help our basis be better
+
         if self.state != 'calibrated':
             self.calibratetick()
         else:
             self.tick()
-        '''
+
 
 
     def calibratetick(self):
