@@ -1,0 +1,9 @@
+
+[Core]
+Name = learn
+Module = learn
+
+[Documentation]
+Author = Various
+Version = 0.1
+Description = Print board values on stdout
