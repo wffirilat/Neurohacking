@@ -72,5 +72,7 @@ class PluginCSVCollect(plugintypes.IPluginExtended):
             row += self.delim
         # remove last comma
         row += '\n'
+        if self.ticknum < 1000:
+            return
         with open(self.file_name, 'a') as f:
             f.write(row)
