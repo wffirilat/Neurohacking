@@ -16,12 +16,13 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
+import numpy
 class NeuralNet:
     """ Takes in a data set and trains with it"""
-    def __init__(self, dataset, validation_size, model, scoring):
+    def __init__(self, validation_size, model, scoring):
         """This is the part where you tell it what kind of training you want to do"""
-        self.dataset = dataset #Must be in a
         self.validation_size = validation_size #0.2 = 20%
+        self.dataset = numpy.empty
         if model == "LR":
             self.model = LogisticRegression()
         elif model == "LDA":
@@ -36,15 +37,16 @@ class NeuralNet:
             self.model =SVC()
         self.scoring = scoring #Possible options = only scoring I think
 
-    def add(self, subset):
+    def data(self, subset):
         """This part should add an item to the data to train from"""
-        self.dataset.add(subset)
+        """Currently all this does is add data for training"""
+        self.dataset = subset
 
     def train(self):
         """Does all the training all at once"""
-        array = self.dataset.values
-        X = array[:, 0:4]
-        Y = array[:, 4]
+        array = self.dataset
+        X = array[:, 0:-1]
+        Y = array[:, -1]
         '''
         This seperates the number from the actual data I think, number needs to be changed to meet the amount of data it is given(8?)
         For example List number E1, E2, E3,E4, E5, E6, E7, E8 Right/Left
@@ -76,18 +78,23 @@ class NeuralNet:
     def validate(self, action, pdata):
         """So this takes the data you put it and sees if it made the correct guess"""
         return self.get(pdata)==action
-url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
-names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
-dataset = pandas.read_csv(url, names=names)
-nn = NeuralNet(dataset, 0.2, 'LR','accuracy')
-nn.train()
-nn.quality()
-nn.get(dataset.head(1).values[:, 0:4]) #This needs to only reference the data itself, or I need to parse it in function
-print(dataset.head(1).values[:,4])
-"""
-Good news! This works. Some bugs that are left
-A) We use validation data and I'm not sure if that is useful considering we are doing our own valiadation 
-B) There are a couple of elements that I am not sure how they work
-C) This only works for lists with the example amount of variables and fixing that is not my problem
-D) 
-"""
+
+def main():
+    url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+    names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
+    dataset = pandas.read_csv(url, names=names)
+    nn = NeuralNet(0.2, 'LR','accuracy')
+    print (type(dataset.values))
+    nn.add(dataset.values)
+    nn.train()
+    nn.quality()
+    nn.get(dataset.head(1).values[:, 0:4]) #This needs to only reference the data itself, or I need to parse it in function
+    print(dataset.head(1).values[:,4])
+    """
+    Good news! This works. Some bugs that are left
+    A) We use validation data and I'm not sure if that is useful considering we are doing our own valiadation 
+    B) There are a couple of elements that I am not sure how they work
+    C) This only works for lists with the example amount of variables and fixing that is not my problem
+    D) 
+    """
+main()
