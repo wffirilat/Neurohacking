@@ -79,7 +79,7 @@ class NeuralNet:
         """So this takes the data you put it and sees if it made the correct guess"""
         return self.get(pdata)==action
 
-def main():
+'''def main():
     url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
     names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
     dataset = pandas.read_csv(url, names=names)
@@ -97,4 +97,4 @@ def main():
     C) This only works for lists with the example amount of variables and fixing that is not my problem
     D) 
     """
-main()
+main()'''

@@ -11,7 +11,7 @@ from numpy.fft import fft, rfft
 import plugin_interface as plugintypes
 
 from enum import Enum
-import neuralnet.py
+from neuralnet import NeuralNet
 import random
 import time
 
@@ -37,7 +37,7 @@ class PluginTraining(plugintypes.IPluginExtended):
         self.rawdata = np.zeros((8, self.storelength))
         self.data = np.zeros((8, self.storelength))
         self.state = States.INIT
-        self.nn = neuralnet(0.2, 'LR','accuracy')
+        self.nn = NeuralNet(0.2, 'LR','accuracy')
         self.actiondata = {action: [] for action in actions}
         self.recorded = np.zeros
 
