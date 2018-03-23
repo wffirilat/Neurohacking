@@ -11,10 +11,9 @@ from numpy.fft import fft, rfft
 import plugin_interface as plugintypes
 
 from enum import Enum
-from neuralnet import NeuralNet
+from neuralnet import NeuralNet, Model
 import random
 import time
-
 
 class States(Enum):
     INIT = 'INIT'
@@ -37,12 +36,9 @@ class PluginTraining(plugintypes.IPluginExtended):
         self.rawdata = np.zeros((8, self.storelength))
         self.data = np.zeros((8, self.storelength))
         self.state = States.INIT
-        self.nn = NeuralNet(0.2, 'LR','accuracy')
+        self.nn = NeuralNet(0.2, Model.LR, 'accuracy')
         self.actiondata = {action: [] for action in actions}
         self.recorded = np.zeros((1000,))
-        self.adder = 0
-
-
 
     def activate(self):
         print("training activated")
@@ -62,11 +58,11 @@ class PluginTraining(plugintypes.IPluginExtended):
         if self.state is States.INIT and self.ticknum >= self.storelength:
             print('Get ready for **INSTRUCTIONS**')
             self.state = States.ACQUIRE
-        if self.state is States.ACQUIRE:
-            if self.adder>10:
+        if self.state in (States.ACQUIRE, States.GATHERED, States.TRAIN):
+            if self.packetnum > 10:
                 '''When it has ten data points'''
-                self.nn.data(self.recorded)
-                self.nn.train()
+                # self.nn.data(self.recorded)
+                self.nn.train(self.recorded)
                 self.nn.quality()
                 self.state = States.INTERACT
             else:
@@ -75,7 +71,6 @@ class PluginTraining(plugintypes.IPluginExtended):
         if self.state is States.INTERACT:
             self.interact(self.data)
 
-
     def process(self, data):
         '''        ...  # TODO IDK what any of this was supposed to do
         self.actiondata[self.nextinst] = ...
@@ -83,32 +78,35 @@ class PluginTraining(plugintypes.IPluginExtended):
         print(self.getRandInstruction())
         self.nextinst = ... # ^that
         '''
-        #Do this step only once
-        dt = time.time()-self.starttime()
+        print("In process: State is ", self.state)
+        # Do this step only once
+        dt = time.time() - self.starttime
         if self.state == States.ACQUIRE:
-            instruction = actions[random.randint(0,1)]
-            print("Move your hand %s")%(instruction)
-            self.state == States.TRAIN
+            instruction = actions[random.randint(0, 1)]
+            print("Move your hand %s" % (instruction))
+            self.state = States.TRAIN
         if self.state == States.TRAIN:
-            if dt>1 and dt<2:
-                temp = data #Yeah I get that this is bad but what can you do?
+            if dt > 1 and dt < 2:  # TODO: refactor out time. use packets instead.
+                temp = data  # Yeah I get that this is bad but what can you do?
                 self.state = States.GATHERED
 
         if self.state == States.GATHERED:
-            temp = fft(temp)
+            # noinspection PyUnboundLocalVariable
+            temp = fft(temp, 60)
             print(temp)
-            self.recorded = np.append(self.recorded, temp)
-            self.adder += 1
+            self.recorded = np.hstack((self.recorded, temp))
+            print("self.recorded.shape =", self.recorded.shape)
             self.state = States.ACQUIRE
-        #Fft the data and store it with the instruction to recorded
-
+            # Fft the data and store it with the instruction to recorded
 
     def train(self):
         """Trains incrementally (we think - not right now)"""
         ...  # TODO
 
-    def validate(self): ...  # TODO
-        # getData()
+    def validate(self):
+        ...  # TODO
+
+    # getData()
 
 
 
@@ -123,4 +121,3 @@ class PluginTraining(plugintypes.IPluginExtended):
     def interact(self, sample):
         sample = fft(sample)
         print(self.nn.get(sample))
-
