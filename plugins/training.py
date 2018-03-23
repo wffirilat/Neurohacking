@@ -39,7 +39,8 @@ class PluginTraining(plugintypes.IPluginExtended):
         self.state = States.INIT
         self.nn = NeuralNet(0.2, 'LR','accuracy')
         self.actiondata = {action: [] for action in actions}
-        self.recorded = np.zeros
+        self.recorded = np.zeros((1000,))
+        self.adder = 0
 
 
 
@@ -62,7 +63,7 @@ class PluginTraining(plugintypes.IPluginExtended):
             print('Get ready for **INSTRUCTIONS**')
             self.state = States.ACQUIRE
         if self.state is States.ACQUIRE:
-            if self.recorded.shape[0]>10:
+            if self.adder>10:
                 '''When it has ten data points'''
                 self.nn.data(self.recorded)
                 self.nn.train()
@@ -97,6 +98,7 @@ class PluginTraining(plugintypes.IPluginExtended):
             temp = fft(temp)
             print(temp)
             self.recorded = np.append(self.recorded, temp)
+            self.adder += 1
             self.state = States.ACQUIRE
         #Fft the data and store it with the instruction to recorded
 
