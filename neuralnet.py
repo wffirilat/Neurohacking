@@ -17,6 +17,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+import pandas
 
 class Model:
     LR = LogisticRegression
@@ -43,14 +44,10 @@ class NeuralNet:
 
     def train(self, data):
         """Does all the training all at once"""
+        #I suspect this doesn't work
         X = data[:, 0:-1]
         Y = data[:, -1]
-        '''
-        This seperates the number from the actual data I think, number needs to be changed to meet the amount of data it is given(8?)
-        For example List number E1, E2, E3,E4, E5, E6, E7, E8 Right/Left
-        I think that I could probably write some code that used the length of the element in the list to do this automatically,
-        but keeper will do that better
-        '''
+
         seed = random.randint(1, 9)
         # This splits the data into training and validation
         self.X_train, self.X_validation, self.Y_train, self.Y_validation = (
@@ -85,18 +82,11 @@ class NeuralNet:
     url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
     names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
     dataset = pandas.read_csv(url, names=names)
+    print (dataset)
     nn = NeuralNet(0.2, Model.LR,'accuracy')
     print (type(dataset.values))
-    nn.add(dataset.values)
-    nn.train()
+    nn.train(dataset.values)
     nn.quality()
     nn.get(dataset.head(1).values[:, 0:4]) #This needs to only reference the data itself, or I need to parse it in function
     print(dataset.head(1).values[:,4])
-    """
-    Good news! This works. Some bugs that are left
-    A) We use validation data and I'm not sure if that is useful considering we are doing our own valiadation 
-    B) There are a couple of elements that I am not sure how they work
-    C) This only works for lists with the example amount of variables and fixing that is not my problem
-    D) 
-    """
 main()'''

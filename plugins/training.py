@@ -68,8 +68,8 @@ class PluginTraining(plugintypes.IPluginExtended):
         if self.state in (States.ACQUIRE, States.GATHERED, States.TRAIN):
             if self.packetnum > 10: #So this goes after 10 seconds which is good?
                 '''When it has ten data points''' #Not actually.
-                # self.nn.data(self.recorded)
-                self.nn.train(self.recorded)
+                #self.nn.data(self.recorded)
+                self.nn.train(self.recorded) #Before this I probs need to attach the information about right or left in here at end
                 self.nn.quality()
                 self.state = States.INTERACT
             else:
@@ -98,11 +98,9 @@ class PluginTraining(plugintypes.IPluginExtended):
 
         if self.state == States.GATHERED:
             temp = fft(temp, 60) #Plot twis this is both real and imaginary
-            #print(temp)
-            print(temp.shape)
             self.recorded = np.hstack((self.recorded, temp))#Todo figure out what this does HINT IT STACKS THEM HORIZONTALLY
             print("self.recorded.shape =", self.recorded.shape) #Yeah I realize this is a real problem
-            print(self.recorded) # So like every 8:60 is its own data set (Variable with fft size
+            # So like every 8:60 is its own data set (Variable with fft size
             #This should be a nxm matrix i think
             self.state = States.ACQUIRE
             # Fft the data and store it with the instruction to recorded
