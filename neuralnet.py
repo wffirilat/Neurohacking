@@ -32,14 +32,14 @@ class NeuralNet:
     def __init__(self, validation_size, model, scoring):
         """This is the part where you tell it what kind of training you want to do"""
         self.validation_size = validation_size  # 0.2 = 20%
-        # self.dataset = numpy.empty
+        self.dataset = numpy.zeros([8,0])#Idk if this works 10 is sample size
         self.model = model()
         self.scoring = scoring  # Possible options = only scoring I think
 
     def data(self, subset):
         """This part should add an item to the data to train from"""
         """Currently all this does is add data for training"""
-        self.dataset = subset
+        self.dataset.append(subset)#subset better be dim 2
 
     def train(self, data):
         """Does all the training all at once"""

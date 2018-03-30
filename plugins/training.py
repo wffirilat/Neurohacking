@@ -13,6 +13,7 @@ import plugin_interface as plugintypes
 from enum import Enum
 from neuralnet import NeuralNet, Model
 import random
+import keyboard
 import time
 
 class States(Enum):
@@ -38,13 +39,19 @@ class PluginTraining(plugintypes.IPluginExtended):
         self.state = States.INIT
         self.nn = NeuralNet(0.2, Model.LR, 'accuracy')
         self.actiondata = {action: [] for action in actions}
-        self.recorded = np.zeros((1000,))
+        self.recorded = np.zeros([8,0])
+        self.pressed = False
 
     def activate(self):
         print("training activated")
 
     # called with each new sample
     def __call__(self, sample):
+        if keyboard.is_pressed('q'): #True if q is pressed
+            print("WHAT!")
+            self.pressed = True
+        '''else:
+            self.pressed = False'''
         self.ticknum += 1
         if sample.id == 0:
             if self.packetnum == -1:
@@ -59,8 +66,8 @@ class PluginTraining(plugintypes.IPluginExtended):
             print('Get ready for **INSTRUCTIONS**')
             self.state = States.ACQUIRE
         if self.state in (States.ACQUIRE, States.GATHERED, States.TRAIN):
-            if self.packetnum > 10:
-                '''When it has ten data points'''
+            if self.packetnum > 10: #So this goes after 10 seconds which is good?
+                '''When it has ten data points''' #Not actually.
                 # self.nn.data(self.recorded)
                 self.nn.train(self.recorded)
                 self.nn.quality()
@@ -78,24 +85,25 @@ class PluginTraining(plugintypes.IPluginExtended):
         print(self.getRandInstruction())
         self.nextinst = ... # ^that
         '''
-        print("In process: State is ", self.state)
-        # Do this step only once
-        dt = time.time() - self.starttime
+        #print("In process: State is ", self.state)
         if self.state == States.ACQUIRE:
             instruction = actions[random.randint(0, 1)]
             print("Move your hand %s" % (instruction))
             self.state = States.TRAIN
-        if self.state == States.TRAIN:
-            if dt > 1 and dt < 2:  # TODO: refactor out time. use packets instead.
-                temp = data  # Yeah I get that this is bad but what can you do?
+        if (self.state == States.TRAIN) & self.pressed: #Only evolves if q was pressed (problem is this happens multiple times a press)
+                temp = data
+                #Todo remember that this only takes the recent x number of packets
                 self.state = States.GATHERED
+                self.pressed = False
 
         if self.state == States.GATHERED:
-            # noinspection PyUnboundLocalVariable
-            temp = fft(temp, 60)
-            print(temp)
-            self.recorded = np.hstack((self.recorded, temp))
-            print("self.recorded.shape =", self.recorded.shape)
+            temp = fft(temp, 60) #Plot twis this is both real and imaginary
+            #print(temp)
+            print(temp.shape)
+            self.recorded = np.hstack((self.recorded, temp))#Todo figure out what this does HINT IT STACKS THEM HORIZONTALLY
+            print("self.recorded.shape =", self.recorded.shape) #Yeah I realize this is a real problem
+            print(self.recorded) # So like every 8:60 is its own data set (Variable with fft size
+            #This should be a nxm matrix i think
             self.state = States.ACQUIRE
             # Fft the data and store it with the instruction to recorded
 
