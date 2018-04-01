@@ -39,7 +39,7 @@ class PluginTraining(plugintypes.IPluginExtended):
         self.state = States.INIT
         self.nn = NeuralNet(0.2, Model.LR, 'accuracy')
         self.actiondata = {action: [] for action in actions}
-        self.recorded = np.zeros([8,0])
+        self.recorded = np.zeros([0,8*20])
         self.pressed = False
 
     def activate(self):
@@ -70,7 +70,7 @@ class PluginTraining(plugintypes.IPluginExtended):
                 '''When it has ten data points''' #Not actually.
                 #self.nn.data(self.recorded)
                 self.nn.train(self.recorded) #Before this I probs need to attach the information about right or left in here at end
-                self.nn.quality()
+                self.nn.quality() #Todo This gives an issue with too many samples I think?
                 self.state = States.INTERACT
             else:
                 self.process(self.data)
@@ -79,13 +79,6 @@ class PluginTraining(plugintypes.IPluginExtended):
             self.interact(self.data)
 
     def process(self, data):
-        '''        ...  # TODO IDK what any of this was supposed to do
-        self.actiondata[self.nextinst] = ...
-
-        print(self.getRandInstruction())
-        self.nextinst = ... # ^that
-        '''
-        #print("In process: State is ", self.state)
         if self.state == States.ACQUIRE:
             instruction = actions[random.randint(0, 1)]
             print("Move your hand %s" % (instruction))
@@ -97,13 +90,16 @@ class PluginTraining(plugintypes.IPluginExtended):
                 self.pressed = False
 
         if self.state == States.GATHERED:
-            temp = fft(temp, 60) #Plot twis this is both real and imaginary
-            self.recorded = np.hstack((self.recorded, temp))#Todo figure out what this does HINT IT STACKS THEM HORIZONTALLY
+            temp = fft(temp, 20) #Plot twist this is both real and imaginary Consider using bayervillege
+            #Todo also this gives issue when only taking real values (ask kindler)
+            print("   ")
+            print(temp.shape)
+            temp = temp.flatten()
+            print(temp.shape)
+            #self.recorded = np.hstack((self.recorded, temp))#HINT IT STACKS THEM HORIZONTALLY
+            self.recorded = np.vstack((self.recorded, temp)) #Todo This bugs out if fft doesnt find enough pattern
             print("self.recorded.shape =", self.recorded.shape) #Yeah I realize this is a real problem
-            # So like every 8:60 is its own data set (Variable with fft size
-            #This should be a nxm matrix i think
             self.state = States.ACQUIRE
-            # Fft the data and store it with the instruction to recorded
 
     def train(self):
         """Trains incrementally (we think - not right now)"""
