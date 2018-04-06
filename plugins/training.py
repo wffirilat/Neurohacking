@@ -10,18 +10,18 @@ from numpy.fft import fft, rfft
 
 import plugin_interface as plugintypes
 
-from enum import Enum
+from enum import Enum, auto
 from neuralnet import NeuralNet, Model
 import random
 import time
 
 class States(Enum):
-    INIT = 'INIT'
-    ACQUIRE = 'ACQUIRE'
-    TRAIN = 'TRAIN'
-    VALIDATE = 'VALIDATE'
-    INTERACT = 'INTERACT'
-    GATHERED = 'GATHERED'
+    INIT = auto()
+    ACQUIRE = auto()
+    TRAIN = auto()
+    VALIDATE = auto()
+    INTERACT = auto()
+    GATHERED = auto()
 
 actions = [
     'Right',

@@ -12,7 +12,6 @@ import sys
 import plugin_interface as plugintypes
 from open_bci_v3 import OpenBCISample
 
-
 class PluginClench(plugintypes.IPluginExtended):
     def __init__(self):
         self.release = True
@@ -33,7 +32,6 @@ class PluginClench(plugintypes.IPluginExtended):
     def activate(self):
         print("clench activated")
 
-
     # called with each new sample
     def __call__(self, sample: OpenBCISample):
         if sample.id == 0:
@@ -46,14 +44,12 @@ class PluginClench(plugintypes.IPluginExtended):
             [sum(self.rawdata[i, :]) / self.storelength for i in range(8)],
             sample.channel_data
         )]
-        #print(np.median(self.rawdata[3,:])) #The reason this is here is because it might help our basis be better
+        # print(np.median(self.rawdata[3,:])) #The reason this is here is because it might help our basis be better
 
         if self.state != 'calibrated':
             self.calibratetick()
         else:
             self.tick()
-
-
 
     def calibratetick(self):
         # print(self.data)
@@ -90,32 +86,31 @@ class PluginClench(plugintypes.IPluginExtended):
                 self.clenchmin = self.current
         elif self.state == 'postclench':
             if dt > 10:
-                self.threshold = self.restingmax + ((self.clenchmax - self.restingmax) / 2)
+                self.threshold = self.restingmax + ((self.clenchmax - self.restingmax) / 3)
                 if self.release:
-                    self.uthreshold = self.restingmin + ((self.clenchmin - self.restingmin) / 2)
+                    self.uthreshold = self.restingmin + ((self.clenchmin - self.restingmin) / 3)
                 self.state = 'calibrated'
-                print ("Resting Max", self.restingmax, "Resting Min", self.restingmin, "\n")
-                print ("Clench Max,", self.clenchmax, "Clench Min",self.clenchmin, "\n")
+                print("Resting Max", self.restingmax, "Resting Min", self.restingmin, "\n")
+                print("Clench Max,", self.clenchmax, "Clench Min", self.clenchmin, "\n")
                 if self.release:
-                    print ("Unclench Max,", self.unclenchmax, "Unclench Min",self.unclenchmin, "\n")
+                    print("Unclench Max,", self.unclenchmax, "Unclench Min", self.unclenchmin, "\n")
                 return
             if self.release:
                 if self.current > self.unclenchmax:
                     self.unclenchmax = self.current
                 if self.current < self.unclenchmin:
                     self.unclenchmin = self.current
-    
+
     @property
     def current(self):
         return self.data[self.channel, self.ticknum % self.storelength]
 
     def tick(self):
 
-        if self.current > self.unclenchmax-((self.current-self.unclenchmax)/5):#watch this work!
+        if self.current > self.unclenchmax - ((self.current - self.unclenchmax) / 5):  # watch this work!
             print(f" {self.current}: Clenched!!")
             ...
 
-        #if self.release:
+        # if self.release:
         #   if self.current < self.uthreshold:
         #      print(f" {self.ticknum}: Unclenched!!")
-
