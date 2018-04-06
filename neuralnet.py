@@ -78,15 +78,18 @@ class NeuralNet:
         """So this takes the data you put it and sees if it made the correct guess"""
         return self.get(pdata) == action
 
-'''def main():
+def main():
     url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
     names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
     dataset = pandas.read_csv(url, names=names)
     print (dataset)
     nn = NeuralNet(0.2, Model.LR,'accuracy')
-    print (type(dataset.values))
+    print (dataset.values.shape)
     nn.train(dataset.values)
     nn.quality()
     nn.get(dataset.head(1).values[:, 0:4]) #This needs to only reference the data itself, or I need to parse it in function
     print(dataset.head(1).values[:,4])
-main()'''
+
+
+if __name__ == '__main__':
+    main()

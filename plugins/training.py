@@ -66,9 +66,10 @@ class PluginTraining(plugintypes.IPluginExtended):
             print('Get ready for **INSTRUCTIONS**')
             self.state = States.ACQUIRE
         if self.state in (States.ACQUIRE, States.GATHERED, States.TRAIN):
-            if self.packetnum > 10: #So this goes after 10 seconds which is good?
-                '''When it has ten data points''' #Not actually.
+            if self.packetnum > 10 and len(self.recorded)>0:
+                #When 10 seconds have passed
                 #self.nn.data(self.recorded)
+                print(self.recorded.shape)
                 self.nn.train(self.recorded) #Before this I probs need to attach the information about right or left in here at end
                 self.nn.quality() #Todo This gives an issue with too many samples I think?
                 self.state = States.INTERACT
