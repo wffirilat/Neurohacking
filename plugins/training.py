@@ -96,7 +96,6 @@ class PluginTraining(plugintypes.IPluginExtended):
             print(temp.shape)
             temp = temp.flatten()
             print(temp.shape)
-            #self.recorded = np.hstack((self.recorded, temp))#HINT IT STACKS THEM HORIZONTALLY
             self.recorded = np.vstack((self.recorded, temp)) #Todo This bugs out if fft doesnt find enough pattern
             print("self.recorded.shape =", self.recorded.shape) #Yeah I realize this is a real problem
             self.state = States.ACQUIRE

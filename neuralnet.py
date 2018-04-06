@@ -28,23 +28,23 @@ class Model:
     SVM = SVC
 
 class NeuralNet:
-    """ Takes in a data set and trains with it"""
-
-    def __init__(self, validation_size, model, scoring):
+    """ Inits the NN """
+    def __init__(self, validation_size: int, model: Model, scoring: str):
         """This is the part where you tell it what kind of training you want to do"""
         self.validation_size = validation_size  # 0.2 = 20%
         self.dataset = numpy.zeros([8,0])#Idk if this works 10 is sample size
         self.model = model()
         self.scoring = scoring  # Possible options = only scoring I think
 
-    def data(self, subset):
+    def addData(self, subset):
         """This part should add an item to the data to train from"""
         """Currently all this does is add data for training"""
         self.dataset.append(subset)#subset better be dim 2
 
-    def train(self, data):
+    def train(self, data: numpy.ndarray):
         """Does all the training all at once"""
         #I suspect this doesn't work
+        assert len(data.shape) == 2
         X = data[:, 0:-1]
         Y = data[:, -1]
 
@@ -67,14 +67,14 @@ class NeuralNet:
         print(confusion_matrix(self.Y_validation, predictions))
         print(classification_report(self.Y_validation, predictions))
 
-    def get(self, pdata):
+    def get(self, pdata) -> str:
         """So the theory behind this function is that it makes a prediction about what the data you gave it was"""
         self.model.fit(self.X_train, self.Y_train)  # What does this do? Who knows! When I take it away here there are no problems, but in quality it causes crashes when absent
         predictions = self.model.predict(pdata)
         print(predictions)
         return (predictions)
 
-    def validate(self, action, pdata):
+    def validate(self, action, pdata) -> bool:
         """So this takes the data you put it and sees if it made the correct guess"""
         return self.get(pdata) == action
 
